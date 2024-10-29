@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>aori's portfolio</title>
+    <style>
+        body {
+            font-family: 'ＭＳ Ｐゴシック', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #ffffff;
+            overflow: hidden;
+            background: linear-gradient(0deg, #201525, #ce8eec);
+            transition: background 0.5s ease;
+        }
+
+        .color-picker {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .color-picker input[type="color"] {
+            border: 1px solid #000000;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .color-picker input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        .color-picker input[type="color"]::-webkit-color-swatch {
+            border: none;
+        }
+
+        .angle-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(to right, #ce8eec 0%, #ce8eec var(--value), #ffffff var(--value), #ffffff 100%);
+            border-radius: 5px;
+            outline: 1px solid black;
+            opacity: 0.9;
+            cursor: pointer;
+        }
+
+        .angle-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 0;
+            height: 0;
+        }
+
+        .angle-slider::-moz-range-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 10px;
+        }
+
+        .slider-label {
+            color: #ffffff;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            text-align: center;
+            text-transform: lowercase;
+            text-shadow:
+                -1px -1px 0 #000, 
+                1px -1px 0 #000, 
+                -1px  1px 0 #000, 
+                1px  1px 0 #000; 
+        }
+
+        .container {
+            text-align: center;
+            background-color: #322238;
+            padding: 15px;
+            border-radius: 0;
+            box-shadow: 0 20px 46px rgba(0, 0, 0, 0.5);
+            max-width: 400px;
+            outline: 2px solid black;
+        }
+
+        h1, p, .skills-section h2, .skills-section p, .button {
+            position: relative;
+            display: inline-block;
+            font-size: 0.9em;
+            text-transform: lowercase;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        h1 {
+            font-size: 1.2em;
+            color: #ce8eec;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
+
+        p {
+            font-size: 0.8em;
+            color: #ffffff;
+            line-height: 1.4;
+            margin: 6px 0;
+            text-align: left;
+        }
+
+        .skills-section {
+            margin-top: 10px;
+        }
+
+        .skills-section h2 {
+            font-size: 1em;
+            color: #ce8eec;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .skills-section p {
+            font-size: 0.8em;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        .skills-section p strong {
+            color: #ce8eec;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 6px 12px;
+            margin-top: 10px;
+            font-size: 0.8em;
+            color: #ffffff;
+            background-color: #ce8eec;
+            text-decoration: none;
+            border-radius: 0;
+            transition: background-color 0.3s ease;
+            outline: 2px solid black;
+        }
+
+        .button:hover {
+            background-color: #c263ee;
+        }
+
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 0.9em;
+            text-align: center;
+            z-index: 1000;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                height: auto;
+                padding: 20px;
+                overflow: auto;
+            }
+
+            .color-picker {
+                top: 5px;
+                right: 5px;
+                gap: 3px;
+            }
+
+            .slider-container {
+                margin-right: 0;
+                align-items: flex-start;
+            }
+
+            .container {
+                max-width: 100%;
+                padding: 10px;
+                margin-top: 10px;
+                box-shadow: none;
+                outline: none;
+            }
+
+            h1 {
+                font-size: 1.1em;
+            }
+
+            p, .skills-section h2, .skills-section p {
+                font-size: 0.8em;
+            }
+
+            .button {
+                font-size: 0.7em;
+                padding: 5px 10px;
+                margin-top: 8px;
+            }
+
+            .angle-slider {
+                width: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .color-picker {
+                top: 10px;
+                right: 10px;
+                flex-direction: column;
+            }
+
+            .slider-container {
+                align-items: center;
+                margin-right: 0;
+            }
+
+            h1 {
+                font-size: 1em;
+            }
+
+            p, .skills-section h2, .skills-section p {
+                font-size: 0.7em;
+            }
+
+            .container {
+                padding: 5px;
+            }
+
+            .button {
+                font-size: 0.7em;
+                padding: 4px 8px;
+            }
+
+            .angle-slider {
+                width: 70px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="color-picker">
+        <div class="slider-container">
+            <label for="angle-slider" class="slider-label">gradient degrees</label>
+            <input type="range" id="angle-slider" class="angle-slider" min="0" max="360" value="0" title="adjust gradient degrees">
+        </div>
+        <input type="color" id="color1" value="#201525">
+        <input type="color" id="color2" value="#ce8eec">
+    </div>
+
+    <div class="container">
+        <h1 class="text__glitch" data-text="aori's portfolio">aori's portfolio</h1>
+        <p class="text__glitch" data-text="welcome! i'm aori, a c++ programmer, game hacker, and reverse engineer.">hey! i’m aori — a passionate c++ programmer, game hacker, and reverse engineer. welcome to my world.</p>
+
+        <div class="skills-section">
+            <h2 class="text__glitch" data-text="about me">about me</h2>
+            <p class="text__glitch" data-text="i specialize in modern c++ development, with a passion for exploring software internals and reverse engineering. i love creating solutions that push boundaries.">
+                i specialize in modern c++ development, with a focus on understanding the inner workings of software through reverse engineering. i love creating solutions that push boundaries and redefine what's possible in external cheats.
+            </p>
+
+            <h2 class="text__glitch" data-text="previous projects">previous projects</h2>
+            <p class="text__glitch" data-text="silence: my first major roblox external project.">
+                silence was one of my earliest and most ambitious projects in the Roblox world. It was an external cheat that broke new ground with its camlock feature, following in the footsteps of projects like Celex and Severe. Silence also introduced a smooth ESP, making it one of the best visuals in the community at the time. Unfortunately, the source code was leaked, marking the end of Silence as we knew it.
+            </p>
+
+            <p class="text__glitch" data-text="mirage: my latest roblox external project.">
+                after Silence, i built mirage, a new and more advanced roblox external. mirage is designed to be adaptable, supporting popular games like Phantom Forces, Blade Ball, and Bad Business, as well as all Roblox R6 and R15 games. it's got features like silent aim and a highly smooth aimbot, along with support for Da Hood and its various copies. mirage is a fresh start — more robust, versatile, and secure.
+            </p>
+
+            <p class="text__glitch" data-text="future projects: expanding into fortnite.">
+                the journey doesn’t stop at roblox. i’m working on a fortnite external cheat under the Mirage brand, which will bring a new level of external enhancement to the game. stay tuned!
+            </p>
+
+            <h2 class="text__glitch" data-text="skills">skills</h2>
+            <p class="text__glitch" data-text="c++ programming: deep understanding of game mechanics, performance optimization, and reverse engineering.">c++ programming: deep understanding of game mechanics, performance optimization, and reverse engineering.</p>
+            <p class="text__glitch" data-text="game hacking: creating unique and smooth experiences through customization and innovation.">game hacking: creating unique, smooth experiences through customization and innovation.</p>
+            <p class="text__glitch" data-text="reverse engineering: dissecting and analyzing code to push the limits of what’s possible.">reverse engineering: dissecting and analyzing code to push the limits of what’s possible.</p>
+        </div>
+
+            <a href="#" class="button text__glitch" data-text="contact me" onclick="copyDiscord()">contact me</a>
+
+            <div id="copy-notification" class="copy-notification" style="display: none;">copied to your clipboard</div>
+
+    </div>
+
+    <script src="https://unpkg.com/baffle@0.3.6/dist/baffle.min.js"></script>
+    <script>
+        const text = baffle(".text__glitch");
+        text.set({
+            characters: "█▒▓░▒/░▓▒▒█▓░▓▒▓█▒░▒▓░/▓░▓",
+            speed: 120
+        });
+        text.start();
+        text.reveal(1500);
+
+        const colorPicker1 = document.getElementById("color1");
+        const colorPicker2 = document.getElementById("color2");
+        const angleSlider = document.getElementById("angle-slider");
+
+        const container = document.querySelector(".container");
+        const headings = document.querySelectorAll("h1, .skills-section h2");
+        const button = document.querySelector(".button");
+
+        function adjustBrightness(color, factor) {
+            const hex = color.replace("#", "");
+            const r = Math.max(0, Math.min(255, parseInt(hex.substring(0, 2), 16) * factor));
+            const g = Math.max(0, Math.min(255, parseInt(hex.substring(2, 4), 16) * factor));
+            const b = Math.max(0, Math.min(255, parseInt(hex.substring(4, 6), 16) * factor));
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function updateBackground() {
+            const angle = angleSlider.value;
+            const max = angleSlider.max;
+            const percentage = (angle / max) * 100;
+
+            document.body.style.background = `linear-gradient(${angle}deg, ${colorPicker1.value}, ${colorPicker2.value})`;
+            angleSlider.style.setProperty("--value", `${percentage}%`);
+
+            const selectedColor = colorPicker2.value;
+
+            angleSlider.style.background = `linear-gradient(to right, ${selectedColor} 0%, ${selectedColor} ${percentage}%, #ffffff ${percentage}%, #ffffff 100%)`;
+
+            const darkerColor = adjustBrightness(selectedColor, 0.6);
+            const lighterTextColor = adjustBrightness(selectedColor, 1.4);
+
+            headings.forEach((heading) => {
+                heading.style.color = lighterTextColor;
+            });
+            container.style.backgroundColor = darkerColor;
+            button.style.backgroundColor = selectedColor;
+        }
+
+        angleSlider.addEventListener("input", updateBackground);
+        colorPicker1.addEventListener("input", updateBackground);
+        colorPicker2.addEventListener("input", updateBackground);
+
+        function copyDiscord() {
+            const discordUsername = "@isonile";
+            navigator.clipboard.writeText(discordUsername).then(() => {
+                const notification = document.getElementById("copy-notification");
+                notification.style.display = "block";
+                setTimeout(() => {
+                    notification.style.display = "none";
+                }, 3000);
+            }).catch((error) => {
+                console.error("Failed to copy text: ", error);
+            });
+        }
+
+    </script>
+
+</body>
+</html>
