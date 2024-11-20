@@ -219,6 +219,46 @@
         transform: translateX(-50%);
       }
 
+      .live-stats {
+        position: absolute;
+        top: 50%;
+        right: 50px;
+        transform: translateY(-50%);
+        background-color: rgba(64, 43, 71, 0.9);
+        padding: 50px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgb(37, 24, 41);
+        width: 220px;
+        font-size: 0.9rem;
+        color: #ffffff;
+      }
+
+      .live-stats:hover {
+        background-color: #4f3458;
+        border: 1px solid #ce8eec;
+      }
+
+      .live-stats h2 {
+        margin: 0 0 15px 0;
+        font-size: 1rem;
+        color: #ce8eec;
+        text-align: center;
+      }
+
+      .stats-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 10px;
+      }
+
+      #stats-graph {
+        display: block;
+        margin: 0 auto;
+        border: 1px solid #6d477a;
+        background: #322238;
+        border-radius: 5px;
+      }
+
       h1,
       p,
       net-gain,
@@ -347,6 +387,18 @@
         border: 1px solid #ce8eec;
         background-color: #6d477a;
       }
+
+      .footer {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        text-align: center;
+        padding: 10px;
+        background-color: transparent;
+        color: #ffffff;
+        font-size: 0.9em;
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      }
     </style>
   </head>
   <body>
@@ -376,22 +428,29 @@
         <div class="arrow" id="arrow"></div>
         <div class="rolled-value" id="rolled-value"></div>
       </div>
+      <div class="live-stats" id="live-stats">
+        <h2>live stats</h2>
+        <div class="stats-item">
+          <span>wins:</span>
+          <span id="stats-wins">0</span>
+        </div>
+        <div class="stats-item">
+          <span>losses:</span>
+          <span id="stats-losses">0</span>
+        </div>
+        <div class="stats-item">
+          <span>wagered:</span>
+          <span id="stats-wagered">$0.00</span>
+        </div>
+        <div class="stats-item">
+          <span>win ratio:</span>
+          <span id="stats-ratio">0%</span>
+        </div>
+        <canvas id="stats-graph" width="200" height="100"></canvas>
+      </div>
     </div>
-
-    <footer style="
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    text-align: center;
-    padding: 10px;
-    background-color:transparent;
-    color: #ffffff;
-    font-size: 0.9em;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-">
-    dice gamble game made by aori aka hakan bekdas @ 2024-2025
-</footer>
-
+    </div>
+    <footer class="footer">dice gamble game made by aori @ 2024-2025</footer>
     <script>
       const first_picker = document.getElementById("color1");
       const second_picker = document.getElementById("color2");
@@ -402,12 +461,15 @@
 
       function brightness_modifier(color, factor) {
         const hex = color.replace("#", "");
+
         let r = parseInt(hex.substring(0, 2), 16);
         let g = parseInt(hex.substring(2, 4), 16);
         let b = parseInt(hex.substring(4, 6), 16);
+
         r = Math.min(255, Math.max(0, Math.round(r * factor)));
         g = Math.min(255, Math.max(0, Math.round(g * factor)));
         b = Math.min(255, Math.max(0, Math.round(b * factor)));
+
         return `rgb(${r}, ${g}, ${b})`;
       }
 
@@ -415,24 +477,33 @@
         const angle = angle_slider.value;
         const max = angle_slider.max;
         const percentage = (angle / max) * 100;
+
         document.body.style.background = `linear-gradient(${angle}deg, ${first_picker.value}, ${second_picker.value})`;
         angle_slider.style.setProperty("--value", `${percentage}%`);
+
         const selected_col = second_picker.value;
+
         angle_slider.style.background = `linear-gradient(to right, ${selected_col} 0%, ${selected_col} ${percentage}%, #ffffff ${percentage}%, #ffffff 100%)`;
+
         const dark_col = brightness_modifier(selected_col, 0.6);
         const light_col = brightness_modifier(selected_col, 1.4);
+
         headings.forEach((heading) => {
           heading.style.color = light_col;
         });
+
         container.style.backgroundColor = dark_col;
         button.style.backgroundColor = selected_col;
       }
+
       angle_slider.addEventListener("input", upd_bg);
       first_picker.addEventListener("input", upd_bg);
       second_picker.addEventListener("input", upd_bg);
+
       const input_field = document.getElementById('text-input');
       const half = document.getElementById('half-btn');
       const double = document.getElementById('double-btn');
+
       half.addEventListener('click', () => {
         const current_val = parseFloat(input_field.value);
         if (!isNaN(current_val)) {
@@ -440,6 +511,7 @@
           upd_net_gain();
         }
       });
+
       double.addEventListener('click', () => {
         const current_val = parseFloat(input_field.value);
         if (!isNaN(current_val)) {
@@ -447,42 +519,57 @@
           upd_net_gain();
         }
       });
+
       input_field.addEventListener('input', () => {
         upd_net_gain();
       });
+
       const draggable = document.getElementById('draggable');
       const rectangle = document.getElementById('rectangle');
       const green_side = document.getElementById('green_side');
       const percentage_label = document.getElementById('percentage_label');
+
       let is_dragging = false;
+
       draggable.addEventListener('mousedown', () => {
         is_dragging = true;
+
         percentage_label.style.display = 'block';
+
         setTimeout(() => {
           percentage_label.style.opacity = '1';
         }, 10);
       });
+
       document.addEventListener('mouseup', () => {
         is_dragging = false;
+
         percentage_label.style.opacity = '0';
+
         setTimeout(() => {
           percentage_label.style.display = 'none';
         }, 300);
       });
+
       document.addEventListener('mousemove', (e) => {
         if (is_dragging) {
           const rect = rectangle.getBoundingClientRect();
           let newX = e.clientX - rect.left;
+
           if (newX < 0) newX = 0;
           if (newX > rect.width) newX = rect.width;
+
           draggable.style.left = newX + 'px';
           green_side.style.width = newX + 'px';
+
           const percentage = Math.round((newX / rect.width) * 100);
+
           percentage_label.innerText = `${percentage}%`;
           percentage_label.style.left = newX + 'px';
           upd_net_gain();
         }
       });
+
       const money_label = document.getElementById('money_label');
       let money = 100;
 
@@ -490,48 +577,199 @@
         money += amount;
         money_label.innerText = `$${money.toFixed(2)}`;
       }
+
       const arrow = document.getElementById('arrow');
       const rolled_value_display = document.getElementById('rolled-value');
       const result_message = document.getElementById('result-message');
       const roll_btn = document.getElementById('roll-btn');
-      roll_btn.addEventListener('click', () => {
-        const bet_amount = parseFloat(input_field.value);
-        if (isNaN(bet_amount) || bet_amount <= 0 || bet_amount > money) {
-          alert('invalid bet amount!');
-          return;
-        }
-        upd_money(-bet_amount);
-        const bet_percentage = (parseFloat(percentage_label.innerText) || 0) / 100;
-        const roll_result = Math.floor(Math.random() * 100) + 1;
-        console.log('roll result:', roll_result);
-        const arrow_pos = (roll_result / 100) * rectangle.offsetWidth;
-        arrow.style.left = `${arrow_pos - 5}px`;
-        rolled_value_display.innerText = `rolled: ${roll_result}`;
-        rolled_value_display.style.left = `${arrow_pos}px`;
-        const house_edge = 0.02;
-        const win_chance = bet_percentage * 100;
-        const payout_multiplier = (99 / win_chance) * (1 - house_edge);
-        const is_win = roll_result <= win_chance;
-        let profit_change = 0;
-        let message = '';
-        if (is_win) {
-          profit_change = bet_amount * (payout_multiplier - 1);
-          const total_win = bet_amount + profit_change;
-          upd_money(total_win);
-          message = `you rolled ${roll_result}, you won $${total_win.toFixed(2)}!`;
+
+      let stats = {
+        wins: 0,
+        losses: 0,
+        wagered: 0,
+        win_count: 0,
+        loss_count: 0,
+      };
+
+      function upd_stats(amount, won) {
+        stats.wagered += amount;
+        if (won) {
+            stats.wins++;
+            stats.win_count++;
         } else {
-          message = `you rolled ${roll_result}, you lost.`;
+            stats.losses++;
+            stats.loss_count++;
         }
-        result_message.innerText = message;
-        const net_gain = (money - 100).toFixed(2);
-        document.querySelector('.net-gain').innerText = `net gain on win: $${net_gain}`;
+
+        document.getElementById('stats-wins').innerText = `${stats.wins.toFixed(0)}`;
+        document.getElementById('stats-losses').innerText = `${stats.losses.toFixed(0)}`;
+        document.getElementById('stats-wagered').innerText = `$${stats.wagered.toFixed(2)}`;
+
+        const ratio = stats.win_count + stats.loss_count > 0 ? (stats.win_count / (stats.win_count + stats.loss_count)) * 100 : 0;
+
+        document.getElementById('stats-ratio').innerText = `${ratio.toFixed(2)}%`;
+        upd_graph();
+    }
+
+    const graph_canvas = document.getElementById('stats-graph');
+    const ctx = graph_canvas.getContext('2d');
+    let history = [0]; 
+    let roll_results = [];  
+
+    function upd_graph() {
+
+      const max_profit = Math.max(...history);
+      const min_profit = Math.min(...history);
+      const padding = (max_profit - min_profit) * 0.1 || 10;
+      const upper_bound = max_profit + padding;
+      const lower_bound = min_profit - padding;
+      const range = upper_bound - lower_bound || 1;
+
+      ctx.clearRect(0, 0, graph_canvas.width, graph_canvas.height);
+
+      const num_labels = 5;
+      const label_spacing = graph_canvas.height / num_labels;
+
+      ctx.font = '10px Arial';
+      ctx.fillStyle = '#666';
+
+      for (let i = 0; i <= num_labels; i++) {
+        const y = i * label_spacing;
+        const label_value = upper_bound - (i * (range / num_labels));
+        ctx.fillText(label_value.toFixed(2), 5, y + 5);
+      }
+
+      if (lower_bound <= 0 && upper_bound >= 0) {
+        const zero_line_y = graph_canvas.height - ((0 - lower_bound) / range) * graph_canvas.height;
+        ctx.strokeStyle = '#666';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, zero_line_y);
+        ctx.lineTo(graph_canvas.width, zero_line_y);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = '#ce8eec';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+
+      const total_points = history.length;
+      const point_spacing = graph_canvas.width / Math.max(total_points - 1, 1);
+
+      history.forEach((value, index) => {
+        const x = index * point_spacing;
+        const y = graph_canvas.height - ((value - lower_bound) / range) * graph_canvas.height;
+
+        if (index === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
       });
+
+      ctx.stroke();
+    }
+
+    const tooltip = document.createElement('div');
+    tooltip.style.position = 'absolute';
+    tooltip.style.padding = '5px';
+    tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    tooltip.style.color = 'white';
+    tooltip.style.borderRadius = '4px';
+    tooltip.style.display = 'none';
+    document.body.appendChild(tooltip);
+
+    graph_canvas.addEventListener('mousemove', (e) => {
+      const rect = graph_canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+
+      const total_points = history.length;
+      const point_spacing = graph_canvas.width / Math.max(total_points - 1, 1);
+      const index = Math.round(mouseX / point_spacing);
+
+      if (index >= 0 && index < history.length) {
+        const roll_result = roll_results[index];  
+
+        let tooltip_text = '';
+        if (roll_result !== undefined) {
+          if (roll_result > 0) {
+            tooltip_text = `profit: $${roll_result.toFixed(2)}`;
+          } else {
+            tooltip_text = `loss: $${Math.abs(roll_result).toFixed(2)}`;
+          }
+        }
+
+        tooltip.innerText = tooltip_text;
+        tooltip.style.left = `${e.pageX + 10}px`;  
+        tooltip.style.top = `${e.pageY + 10}px`;  
+        tooltip.style.display = 'block';
+      }
+    });
+
+    graph_canvas.addEventListener('mouseleave', () => {
+      tooltip.style.display = 'none';
+    });
+
+    roll_btn.addEventListener('click', () => {
+      const bet_amount = parseFloat(input_field.value);
+
+      if (isNaN(bet_amount) || bet_amount <= 0 || bet_amount > money) {
+        alert('invalid bet amount!');
+        return;
+      }
+
+      upd_money(-bet_amount);
+
+      const bet_percentage = (parseFloat(percentage_label.innerText) || 0) / 100;
+      const roll_result = Math.floor(Math.random() * 100) + 1;
+
+      console.log('roll result:', roll_result);
+
+      const arrow_pos = (roll_result / 100) * rectangle.offsetWidth;
+
+      arrow.style.left = `${arrow_pos - 5}px`;
+      rolled_value_display.innerText = `rolled: ${roll_result}`;
+      rolled_value_display.style.left = `${arrow_pos}px`;
+
+      const house_edge = 0.02;
+      const win_chance = bet_percentage * 100;
+      const payout_multiplier = (99 / win_chance) * (1 - house_edge);
+      const is_win = roll_result <= win_chance;
+
+      let profit_change = 0;
+      let message = '';
+
+      if (is_win) {
+        profit_change = bet_amount * (payout_multiplier - 1);
+        const total_wins = bet_amount + profit_change;
+        upd_money(total_wins);
+        message = `you rolled ${roll_result}, you won $${total_wins.toFixed(2)}!`;
+        upd_stats(bet_amount, true);
+
+        roll_results.push(profit_change);
+        history.push(history[history.length - 1] + profit_change);  
+      } else {
+        profit_change = -bet_amount;
+        message = `you rolled ${roll_result}, you lost.`;
+        upd_stats(bet_amount, false);
+
+        roll_results.push(profit_change);  
+        history.push(history[history.length - 1] + profit_change);  
+      }
+
+      result_message.innerText = message;
+      const net_gain = (money - 100).toFixed(2);
+      document.querySelector('.net-gain').innerText = `net gain: $${net_gain}`;
+      upd_graph();  
+    });
+
       money_label.innerText = `$${money.toFixed(2)}`;
 
       function upd_net_gain() {
         const bet_amount = parseFloat(input_field.value) || 0;
         const win_chance = (parseFloat(percentage_label.innerText) || 0) / 100;
         const house_edge = 0.02;
+
         if (bet_amount > 0 && win_chance > 0) {
           const payout = (99 / (win_chance * 100)) * (1 - house_edge);
           const net_gain = bet_amount * (payout - 1);
