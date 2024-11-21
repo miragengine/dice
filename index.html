@@ -581,7 +581,7 @@
       });
 
       const money_label = document.getElementById('money_label');
-      let money = 100;
+      let money = 10000;
 
       function upd_money(amount) {
         money += amount;
@@ -767,6 +767,7 @@
         history.push(history[history.length - 1] + profit_change);  
       }
 
+      result_message.innerText = message;
       const net_gain = (money - 100).toFixed(2);
       document.querySelector('.net-gain').innerText = `net gain: $${net_gain}`;
       upd_graph();  
