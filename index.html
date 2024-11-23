@@ -172,6 +172,17 @@
         text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
       }
 
+      .attempt-counter {
+        position: absolute;
+        top: -65px;
+        left: calc(50%);
+        transform: translateX(-50%);
+        font-size: 1.2em;
+        color: #ffffff;
+        font-weight: bold;
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      }
+
       .result-message {
         font-size: 1.2rem;
         margin-top: 10px;
@@ -409,6 +420,7 @@
         font-size: 0.9em;
         text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
       }
+
     </style>
   </head>
   <body>
@@ -429,6 +441,7 @@
       <div class="net-gain">net gain on win: $?</div>
       <a href="#" class="roll-button" id="roll-btn">roll</a>
       <div class="money-label" id="money_label">$0.00</div>
+      <div class="attempt-counter" id="attempt-counter"></div>
       <div class="horizontal-rectangle" id="rectangle">
         <div class="green-side" id="green_side"></div>
         <div class="draggable-button" id="draggable"></div>
@@ -462,6 +475,17 @@
     </div>
     <footer class="footer">dice gamble game made by aori @ 2024-2025</footer>
     <script>
+      const attemptCounterElement = document.getElementById('attempt-counter');
+      let attempts = parseInt(localStorage.getItem('attempts')) || 0;
+      attempts++;
+      localStorage.setItem('attempts', attempts); 
+      attemptCounterElement.textContent = `attempt: ${attempts}`;
+
+      window.reset_attempts = function () {
+        localStorage.setItem('attempts', 0);
+        attemptCounterElement.textContent = `attempt: 0`;
+      };
+
       const first_picker = document.getElementById("color1");
       const second_picker = document.getElementById("color2");
       const angle_slider = document.getElementById("angle-slider");
@@ -581,7 +605,7 @@
       });
 
       const money_label = document.getElementById('money_label');
-      let money = 1000;
+      let money = 10000;
 
       function upd_money(amount) {
         money += amount;
