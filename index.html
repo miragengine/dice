@@ -475,15 +475,15 @@
     </div>
     <footer class="footer">dice gamble game made by aori @ 2024-2025</footer>
     <script>
-      const attemptCounterElement = document.getElementById('attempt-counter');
+      const attempt_counter_element = document.getElementById('attempt-counter');
       let attempts = parseInt(localStorage.getItem('attempts')) || 0;
       attempts++;
       localStorage.setItem('attempts', attempts); 
-      attemptCounterElement.textContent = `attempt: ${attempts}`;
+      attempt_counter_element.textContent = `attempt: ${attempts}`;
 
       window.reset_attempts = function () {
         localStorage.setItem('attempts', 0);
-        attemptCounterElement.textContent = `attempt: 0`;
+        attempt_counter_element.textContent = `attempt: 0`;
       };
 
       const first_picker = document.getElementById("color1");
