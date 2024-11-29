@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta property="og:title" content="betex.cc | the best dice game ever" />
     <meta property="og:description" content="enjoy this fun online dice game. roll the dice, win prizes!" />
     <meta property="og:image" content="https://betex.cc/embed.png" />
@@ -10,808 +10,926 @@
     <meta property="og:type" content="website" />
     <title>betex.cc | the best dice game ever</title>
     <style>
-      body {
-        font-family: 'ＭＳ Ｐゴシック', sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        color: #ffffff;
-        overflow: hidden;
-        background: linear-gradient(0deg, #201525, #ce8eec);
-        transition: background 0.5s ease;
-      }
+        body {
+            font-family: "ＭＳ Ｐゴシック", sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            color: #ffffff;
+            overflow: hidden;
+            background: linear-gradient(0deg, #201525, #ce8eec);
+            transition: background 0.5s ease;
+        }
 
-      .color-picker {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        display: flex;
-        gap: 5px;
-      }
+        .color-picker {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
 
-      .color-picker input[type="color"] {
-        border: 1px solid rgb(37, 24, 41);
-        width: 20px;
-        height: 20px;
-        padding: 0;
-        appearance: none;
-        cursor: pointer;
-      }
+            .color-picker input[type="color"] {
+                border: 1px solid rgb(37, 24, 41);
+                width: 20px;
+                height: 20px;
+                padding: 0;
+                appearance: none;
+                cursor: pointer;
+            }
 
-      .color-picker input[type="color"]::-webkit-color-swatch-wrapper {
-        padding: 0;
-      }
+                .color-picker input[type="color"]::-webkit-color-swatch-wrapper {
+                    padding: 0;
+                }
 
-      .color-picker input[type="color"]::-webkit-color-swatch {
-        border: none;
-      }
+                .color-picker input[type="color"]::-webkit-color-swatch {
+                    border: none;
+                }
 
-      .angle-slider {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 100px;
-        height: 5px;
-        background: linear-gradient(to right, #ce8eec 0%, #ce8eec var(--value), #ffffff var(--value), #ffffff 100%);
-        border-radius: 5px;
-        outline: 1px solid rgb(37, 24, 41);
-        opacity: 0.9;
-        cursor: pointer;
-      }
+        .angle-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(to right, #ce8eec 0%, #ce8eec var(--value), #ffffff var(--value), #ffffff 100%);
+            border-radius: 5px;
+            outline: 1px solid rgb(37, 24, 41);
+            opacity: 0.9;
+            cursor: pointer;
+        }
 
-      .angle-slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 0;
-        height: 0;
-      }
+            .angle-slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 0;
+                height: 0;
+            }
 
-      .angle-slider::-moz-range-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 0;
-        height: 0;
-      }
+            .angle-slider::-moz-range-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 0;
+                height: 0;
+            }
 
-      .slider-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-right: 10px;
-      }
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 10px;
+        }
 
-      .slider-label {
-        color: #ffffff;
-        font-size: 0.9em;
-        margin-bottom: 5px;
-        text-align: center;
-        text-transform: lowercase;
-        text-shadow:
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000,
-          1px 1px 0 #000;
-      }
+        .slider-label {
+            color: #ffffff;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            text-align: center;
+            text-transform: lowercase;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
 
-      .container {
-        position: relative;
-        text-align: center;
-        background-color: #322238;
-        padding: 150px 550px;
-        border-radius: 0;
-        box-shadow: 0 0px 46px rgba(0, 0, 0, 0.75);
-        max-width: 750px;
-        outline: 1px solid rgb(37, 24, 41);
-      }
+        .container {
+            position: relative;
+            text-align: center;
+            background-color: #322238;
+            padding: 150px 550px;
+            border-radius: 0;
+            box-shadow: 0 0px 46px rgba(0, 0, 0, 0.75);
+            max-width: 750px;
+            outline: 1px solid rgb(37, 24, 41);
+        }
 
-      .horizontal-rectangle {
-        position: relative;
-        width: 500px;
-        height: 40px;
-        border: 1px solid rgb(37, 24, 41);
-        background-color: rgb(64, 43, 71);
-        overflow: hidden;
-      }
+        .horizontal-rectangle {
+            position: relative;
+            width: 500px;
+            height: 40px;
+            border: 1px solid rgb(37, 24, 41);
+            background-color: rgb(64, 43, 71);
+            overflow: hidden;
+        }
 
-      .horizontal-rectangle:hover {
-        border: 1px solid rgb(43, 28, 48);
-      }
+            .horizontal-rectangle:hover {
+                border: 1px solid rgb(43, 28, 48);
+            }
 
-      .green-side {
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        background-color: rgb(206, 142, 236);
-        width: 0;
-        transition: width 0.1s;
-      }
+        .green-side {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background-color: rgb(206, 142, 236);
+            width: 0;
+            transition: width 0.1s;
+        }
 
-      .draggable-button {
-        position: absolute;
-        top: 50%;
-        width: 15px;
-        height: 50px;
-        background-color: rgb(37, 24, 41);
-        cursor: pointer;
-        transform: translateY(-50%);
-      }
+        .draggable-button {
+            position: absolute;
+            top: 50%;
+            width: 15px;
+            height: 50px;
+            background-color: rgb(37, 24, 41);
+            cursor: pointer;
+            transform: translateY(-50%);
+        }
 
-      .draggable-button:hover {
-        background-color: rgb(51, 33, 56);
-      }
+            .draggable-button:hover {
+                background-color: rgb(51, 33, 56);
+            }
 
-      .percentage-label {
-        position: absolute;
-        top: 10px;
-        color: #ffffff;
-        font-size: 16px;
-        font-weight: bold;
-        pointer-events: none;
-        text-shadow:
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000,
-          1px 1px 0 #000;
-        transform: translateX(-10%);
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        display: none;
-      }
+        .percentage-label {
+            position: absolute;
+            top: 10px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            pointer-events: none;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            transform: translateX(-10%);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            display: none;
+        }
 
-      .money-label {
-        position: absolute;
-        top: -40px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 1.2em;
-        color: #ffffff;
-        font-weight: bold;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-      }
+        .money-label {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
 
-      .attempt-counter {
-        position: absolute;
-        top: -65px;
-        left: calc(50%);
-        transform: translateX(-50%);
-        font-size: 1.2em;
-        color: #ffffff;
-        font-weight: bold;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-      }
+        .attempt-counter {
+            position: absolute;
+            top: -65px;
+            left: calc(50%);
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            color: #ffffff;
+            font-weight: bold;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
 
-      .result-message {
-        font-size: 1.2rem;
-        margin-top: 10px;
-        color: #fff;
-        padding: 10px;
-        background-color: #333;
-        border-radius: 5px;
-        text-align: center;
-      }
+        .result-message {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            color: #fff;
+            padding: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            text-align: center;
+        }
 
-      .arrow-container {
-        position: relative;
-        height: 30px;
-        margin-top: 10px;
-      }
+        .arrow-container {
+            position: relative;
+            height: 30px;
+            margin-top: 10px;
+        }
 
-      .arrow {
-        position: absolute;
-        top: -5px;
-        width: 0;
-        height: 0;
-        border-left: 6px solid transparent;
-        border-right: 6px solid transparent;
-        border-bottom: 12px solid black;
-      }
+        .arrow {
+            position: absolute;
+            top: -5px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid transparent;
+            border-right: 6px solid transparent;
+            border-bottom: 12px solid black;
+            transition: left 0.25s ease;
+        }
 
-      .arrow::after {
-        content: '';
-        position: absolute;
-        top: 2px;
-        left: -5px;
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-bottom: 10px solid white;
-      }
+            .arrow::after {
+                content: "";
+                position: absolute;
+                top: 2px;
+                left: -5px;
+                width: 0;
+                height: 0;
+                border-left: 5px solid transparent;
+                border-right: 5px solid transparent;
+                border-bottom: 10px solid white;
+            }
 
-      .rolled-value {
-        position: absolute;
-        top: 15px;
-        font-size: 1rem;
-        color: #fff;
-        text-shadow:
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000,
-          1px 1px 0 #000;
-        text-align: center;
-        transform: translateX(-50%);
-      }
+        .rolled-value {
+            position: absolute;
+            top: 15px;
+            font-size: 1rem;
+            color: #fff;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            text-align: center;
+            transform: translateX(-50%);
+            transition: left 0.25s ease;
+        }
 
-      .live-stats {
-        position: absolute;
-        top: 50%;
-        right: 50px;
-        transform: translateY(-50%);
-        background-color: rgba(64, 43, 71, 0.9);
-        padding: 50px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        border: 1px solid rgb(37, 24, 41);
-        text-shadow:
-          -1px -1px 0 #000,
-          1px -1px 0 #000,
-          -1px 1px 0 #000,
-          1px 1px 0 #000;
-        width: 220px;
-        font-size: 0.9rem;
-        color: #ffffff;
-      }
+        .arrow.win {
+            border-bottom-color: rgb(255, 255, 255);
+        }
 
-      .live-stats:hover {
-        background-color: #4f3458;
-        border: 1px solid #ce8eec;
-      }
+        .arrow.loss {
+            border-bottom-color: rgb(255, 255, 255);
+        }
 
-      .live-stats h2 {
-        margin: 0 0 15px 0;
-        font-size: 1rem;
-        color: #ce8eec;
-        text-align: center;
-      }
+        .rolled-value.win {
+            color: rgb(89, 172, 89);
+        }
 
-      .stats-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 10px;
-      }
+        .rolled-value.loss {
+            color: rgb(211, 89, 89);
+        }
 
-      #stats-graph {
-        display: block;
-        margin: 0 auto;
-        border: 1px solid #6d477a;
-        background: #322238;
-        border-radius: 5px;
-      }
+        .live-stats {
+            position: absolute;
+            top: 50%;
+            right: 50px;
+            transform: translateY(-50%);
+            background-color: rgba(64, 43, 71, 0.9);
+            padding: 50px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgb(37, 24, 41);
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            width: 220px;
+            font-size: 0.9rem;
+            color: #ffffff;
+        }
 
-      h1,
-      p,
-      net-gain,
-      text-input,
-      .section h2,
-      .section p,
-      .button,
-      .roll-button {
-        position: relative;
-        display: inline-block;
-        font-size: 0.9em;
-        text-transform: lowercase;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-      }
+            .live-stats:hover {
+                background-color: #4f3458;
+                border: 1px solid #ce8eec;
+            }
 
-      .roll-button {
-        position: absolute;
-        bottom: 10%;
-        left: 25px;
-        padding: 30px 140px;
-        font-size: 1.2em;
-        color: #ffffff;
-        background-color: #ce8eec;
-        text-decoration: none;
-        border-radius: 0;
-        box-shadow: 0 0px 46px rgba(0, 0, 0, 2);
-        transition: background-color 0.3s ease;
-        outline: 1px solid rgb(37, 24, 41);
-      }
+            .live-stats h2 {
+                margin: 0 0 15px 0;
+                font-size: 1rem;
+                color: #ce8eec;
+                text-align: center;
+            }
 
-      .roll-button:hover {
-        background-color: #c263ee;
-        box-shadow: 0 0px 46px rgba(0, 0, 0, 0.5);
-      }
+        .stats-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
 
-      .net-gain {
-        position: absolute;
-        bottom: 35%;
-        left: 11%;
-        transform: translateX(-50%);
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-        font-size: 1.0em;
-        color: #ffffff;
-        line-height: 1.4;
-        margin: 6px 0;
-        text-align: center;
-      }
+        #stats-graph {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #6d477a;
+            background: #322238;
+            border-radius: 5px;
+        }
 
-      h1 {
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 1.2em;
-        color: #ce8eec;
-        margin-bottom: 10px;
-        font-weight: normal;
-      }
+        h1,
+        p,
+        net-gain,
+        text-input,
+        .section h2,
+        .section p,
+        .button,
+        .roll-button {
+            position: relative;
+            display: inline-block;
+            font-size: 0.9em;
+            text-transform: lowercase;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
 
-      p {
-        position: absolute;
-        top: calc(0px + 1.2em + 10px);
-        left: 37%;
-        font-size: 0.8em;
-        color: #ffffff;
-        line-height: 5.4;
-        margin: 6px 0;
-        text-align: left;
-      }
+        .roll-button {
+            position: absolute;
+            bottom: 10%;
+            left: 25px;
+            padding: 30px 140px;
+            font-size: 1.2em;
+            color: #ffffff;
+            background-color: #ce8eec;
+            text-decoration: none;
+            border-radius: 0;
+            box-shadow: 0 0px 46px rgba(0, 0, 0, 2);
+            transition: background-color 0.3s ease;
+            outline: 1px solid rgb(37, 24, 41);
+        }
 
-      .text-input-container {
-        display: flex;
-        align-items: center;
-        position: absolute;
-        bottom: 55%;
-        left: 20px;
-      }
+            .roll-button:hover {
+                background-color: #c263ee;
+                box-shadow: 0 0px 46px rgba(0, 0, 0, 0.5);
+            }
 
-      .text-input {
-        padding: 20px 10px;
-        color: #ececec;
-        background-color: #322238;
-        border: 1px solid #ce8eec27;
-        width: 200px;
-        text-align: center;
-      }
+        .net-gain {
+            position: absolute;
+            bottom: 35%;
+            left: 11%;
+            transform: translateX(-50%);
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+            font-size: 1em;
+            color: #ffffff;
+            line-height: 1.4;
+            margin: 6px 0;
+            text-align: center;
+        }
 
-      .text-input::placeholder {
-        font-size: 1em;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-        color: #dbdbdb;
-      }
+        h1 {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.2em;
+            color: #ce8eec;
+            margin-bottom: 10px;
+            font-weight: normal;
+        }
 
-      .text-input:hover {
-        background-color: #6d477a;
-        border: 1px solid #ce8eec;
-      }
+        p {
+            position: absolute;
+            top: calc(0px + 1.2em + 10px);
+            left: 37%;
+            font-size: 0.8em;
+            color: #ffffff;
+            line-height: 5.4;
+            margin: 6px 0;
+            text-align: left;
+        }
 
-      .text-input:focus {
-        background-color: #a26ab4;
-        border: 1px solid #f1d4ff;
-        outline: none;
-      }
+        .text-input-container {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            bottom: 55%;
+            left: 20px;
+        }
 
-      .text-input:focus::placeholder {
-        color: transparent;
-        text-shadow: -1px -1px 0 #00000000, 1px -1px 0 #00000000, -1px 1px 0 #00000000, 1px 1px 0 #00000000;
-      }
+        .text-input {
+            padding: 20px 10px;
+            color: #ececec;
+            background-color: #322238;
+            border: 1px solid #ce8eec27;
+            width: 200px;
+            text-align: center;
+        }
 
-      .button {
-        display: inline-block;
-        padding: 8px;
-        background-color: #322238;
-        color: #fff;
-        font-size: 0.8em;
-        text-align: center;
-        width: 36px;
-        height: 36px;
-        cursor: pointer;
-        margin: 0 5px;
-        border: 1px solid #ce8eec27;
-        outline: none;
-      }
+            .text-input::placeholder {
+                font-size: 1em;
+                text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+                color: #dbdbdb;
+            }
 
-      .button:hover {
-        border: 1px solid #ce8eec;
-        background-color: #6d477a;
-      }
+            .text-input:hover {
+                background-color: #6d477a;
+                border: 1px solid #ce8eec;
+            }
 
-      .footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        text-align: center;
-        padding: 10px;
-        background-color: transparent;
-        color: #ffffff;
-        font-size: 0.9em;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-      }
+            .text-input:focus {
+                background-color: #a26ab4;
+                border: 1px solid #f1d4ff;
+                outline: none;
+            }
 
+                .text-input:focus::placeholder {
+                    color: transparent;
+                    text-shadow: -1px -1px 0 #00000000, 1px -1px 0 #00000000, -1px 1px 0 #00000000, 1px 1px 0 #00000000;
+                }
+
+        .button {
+            display: inline-block;
+            padding: 8px;
+            background-color: #322238;
+            color: #fff;
+            font-size: 0.8em;
+            text-align: center;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            margin: 0 5px;
+            border: 1px solid #ce8eec27;
+            outline: none;
+        }
+
+            .button:hover {
+                border: 1px solid #ce8eec;
+                background-color: #6d477a;
+            }
+
+        .footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            background-color: transparent;
+            color: #ffffff;
+            font-size: 0.9em;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        @media (max-width: 1024px) {
+            .container {
+                padding: 100px 50px;
+                max-width: 90%;
+            }
+
+            .horizontal-rectangle {
+                width: 100%;
+            }
+
+            .live-stats {
+                top: auto;
+                bottom: 10px;
+                right: 10px;
+                transform: none;
+                width: auto;
+                padding: 20px;
+            }
+
+            .roll-button {
+                padding: 20px 80px;
+                font-size: 1em;
+                bottom: 15%;
+                left: 10%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column;
+                align-items: stretch;
+                justify-content: flex-start;
+            }
+
+            .container {
+                margin: 20px;
+                padding: 50px 20px;
+            }
+
+            .text-input-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .text-input {
+                width: 100%;
+            }
+
+            .live-stats {
+                position: relative;
+                top: auto;
+                right: auto;
+                bottom: auto;
+                left: auto;
+                margin: 20px;
+                width: 100%;
+            }
+
+            .roll-button {
+                width: 100%;
+                left: 0;
+                padding: 15px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1em;
+            }
+
+            .roll-button {
+                padding: 10px 0;
+                font-size: 0.9em;
+            }
+
+            .live-stats h2 {
+                font-size: 0.9em;
+            }
+
+            .text-input::placeholder {
+                font-size: 0.9em;
+            }
+
+            .money-label,
+            .attempt-counter {
+                font-size: 1em;
+            }
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="color-picker">
-      <div class="slider-container">
-        <label for="angle-slider" class="slider-label">gradient degrees</label>
-        <input type="range" id="angle-slider" class="angle-slider" min="0" max="360" value="0" title="adjust gradient degrees">
-      </div>
-      <input type="color" id="color1" value="#201525">
-      <input type="color" id="color2" value="#ce8eec">
+        <div class="slider-container">
+            <label for="angle-slider" class="slider-label">gradient degrees</label>
+            <input type="range" id="angle-slider" class="angle-slider" min="0" max="360" value="0" title="adjust gradient degrees" />
+        </div>
+        <input type="color" id="color1" value="#201525" />
+        <input type="color" id="color2" value="#ce8eec" />
     </div>
     <div class="container">
-      <div class="text-input-container">
-        <button class="button" id="half-btn">1/2</button>
-        <input type="number" id="text-input" class="text-input" placeholder="bet amount" min="0" step="any">
-        <button class="button" id="double-btn">x2</button>
-      </div>
-      <div class="net-gain">net gain on win: $?</div>
-      <a href="#" class="roll-button" id="roll-btn">roll</a>
-      <div class="money-label" id="money_label">$0.00</div>
-      <div class="attempt-counter" id="attempt-counter"></div>
-      <div class="horizontal-rectangle" id="rectangle">
-        <div class="green-side" id="green_side"></div>
-        <div class="draggable-button" id="draggable"></div>
-        <div class="percentage-label" id="percentage_label">0%</div>
-      </div>
-      <div class="arrow-container" id="arrow-container">
-        <div class="arrow" id="arrow"></div>
-        <div class="rolled-value" id="rolled-value"></div>
-      </div>
-      <div class="live-stats" id="live-stats">
-        <h2>live stats</h2>
-        <div class="stats-item">
-          <span>wins:</span>
-          <span id="stats-wins">0</span>
+        <div class="text-input-container">
+            <button class="button" id="half-btn">1/2</button>
+            <input type="number" id="text-input" class="text-input" placeholder="bet amount" min="0" step="any" />
+            <button class="button" id="double-btn">x2</button>
         </div>
-        <div class="stats-item">
-          <span>losses:</span>
-          <span id="stats-losses">0</span>
+        <div class="net-gain">net gain on win: $?</div>
+        <a href="#" class="roll-button" id="roll-btn">roll</a>
+        <div class="money-label" id="money_label">$0.00</div>
+        <div class="attempt-counter" id="attempt-counter"></div>
+        <div class="horizontal-rectangle" id="rectangle">
+            <div class="green-side" id="green_side"></div>
+            <div class="draggable-button" id="draggable"></div>
+            <div class="percentage-label" id="percentage_label">1%</div>
         </div>
-        <div class="stats-item">
-          <span>wagered:</span>
-          <span id="stats-wagered">$0.00</span>
+        <div class="arrow-container" id="arrow-container">
+            <div class="arrow" id="arrow"></div>
+            <div class="rolled-value" id="rolled-value"></div>
         </div>
-        <div class="stats-item">
-          <span>win ratio:</span>
-          <span id="stats-ratio">0%</span>
+        <div class="live-stats" id="live-stats">
+            <h2>live stats</h2>
+            <div class="stats-item">
+                <span>wins:</span>
+                <span id="stats-wins">0</span>
+            </div>
+            <div class="stats-item">
+                <span>losses:</span>
+                <span id="stats-losses">0</span>
+            </div>
+            <div class="stats-item">
+                <span>wagered:</span>
+                <span id="stats-wagered">$0.00</span>
+            </div>
+            <div class="stats-item">
+                <span>win ratio:</span>
+                <span id="stats-ratio">0%</span>
+            </div>
+            <canvas id="stats-graph" width="200" height="100"></canvas>
         </div>
-        <canvas id="stats-graph" width="200" height="100"></canvas>
-      </div>
-    </div>
     </div>
     <footer class="footer">dice gamble game made by aori @ 2024-2025</footer>
     <script>
-      const attempt_counter_element = document.getElementById('attempt-counter');
-      let attempts = parseInt(localStorage.getItem('attempts')) || 0;
-      attempts++;
-      localStorage.setItem('attempts', attempts); 
-      attempt_counter_element.textContent = `attempt: ${attempts}`;
+        const attempt_counter = document.getElementById("attempt-counter");
+        let attempts = parseInt(localStorage.getItem("attempts")) || 0;
+        attempts++;
+        localStorage.setItem("attempts", attempts);
+        attempt_counter.textContent = `attempt: ${attempts}`;
 
-      window.reset_attempts = function () {
-        localStorage.setItem('attempts', 0);
-        attempt_counter_element.textContent = `attempt: 0`;
-      };
+        window.reset_attempts = function () {
+            localStorage.setItem("attempts", 0);
+            attempt_counter.textContent = `attempt: 0`;
+        };
 
-      const first_picker = document.getElementById("color1");
-      const second_picker = document.getElementById("color2");
-      const angle_slider = document.getElementById("angle-slider");
-      const container = document.querySelector(".container");
-      const headings = document.querySelectorAll("h1, .skills-section h2");
-      const button = document.querySelector(".button");
+        const first_picker = document.getElementById("color1");
+        const second_picker = document.getElementById("color2");
+        const angle_slider = document.getElementById("angle-slider");
+        const container = document.querySelector(".container");
+        const headings = document.querySelectorAll("h1, .skills-section h2");
+        const button = document.querySelector(".button");
 
-      function brightness_modifier(color, factor) {
-        const hex = color.replace("#", "");
+        function brightness_modifier(color, factor) {
+            const hex = color.replace("#", "");
 
-        let r = parseInt(hex.substring(0, 2), 16);
-        let g = parseInt(hex.substring(2, 4), 16);
-        let b = parseInt(hex.substring(4, 6), 16);
+            let r = parseInt(hex.substring(0, 2), 16);
+            let g = parseInt(hex.substring(2, 4), 16);
+            let b = parseInt(hex.substring(4, 6), 16);
 
-        r = Math.min(255, Math.max(0, Math.round(r * factor)));
-        g = Math.min(255, Math.max(0, Math.round(g * factor)));
-        b = Math.min(255, Math.max(0, Math.round(b * factor)));
+            r = Math.min(255, Math.max(0, Math.round(r * factor)));
+            g = Math.min(255, Math.max(0, Math.round(g * factor)));
+            b = Math.min(255, Math.max(0, Math.round(b * factor)));
 
-        return `rgb(${r}, ${g}, ${b})`;
-      }
+            return `rgb(${r}, ${g}, ${b})`;
+        }
 
-      function upd_bg() {
-        const angle = angle_slider.value;
-        const max = angle_slider.max;
-        const percentage = (angle / max) * 100;
+        function upd_bg() {
+            const angle = angle_slider.value;
+            const max = angle_slider.max;
+            const percentage = (angle / max) * 100;
 
-        document.body.style.background = `linear-gradient(${angle}deg, ${first_picker.value}, ${second_picker.value})`;
-        angle_slider.style.setProperty("--value", `${percentage}%`);
+            document.body.style.background = `linear-gradient(${angle}deg, ${first_picker.value}, ${second_picker.value})`;
+            angle_slider.style.setProperty("--value", `${percentage}%`);
 
-        const selected_col = second_picker.value;
+            const selected_col = second_picker.value;
 
-        angle_slider.style.background = `linear-gradient(to right, ${selected_col} 0%, ${selected_col} ${percentage}%, #ffffff ${percentage}%, #ffffff 100%)`;
+            angle_slider.style.background = `linear-gradient(to right, ${selected_col} 0%, ${selected_col} ${percentage}%, #ffffff ${percentage}%, #ffffff 100%)`;
 
-        const dark_col = brightness_modifier(selected_col, 0.6);
-        const light_col = brightness_modifier(selected_col, 1.4);
+            const dark_col = brightness_modifier(selected_col, 0.6);
+            const light_col = brightness_modifier(selected_col, 1.4);
 
-        headings.forEach((heading) => {
-          heading.style.color = light_col;
+            headings.forEach((heading) => {
+                heading.style.color = light_col;
+            });
+
+            container.style.backgroundColor = dark_col;
+            button.style.backgroundColor = selected_col;
+        }
+
+        angle_slider.addEventListener("input", upd_bg);
+        first_picker.addEventListener("input", upd_bg);
+        second_picker.addEventListener("input", upd_bg);
+
+        const input_field = document.getElementById("text-input");
+        const half = document.getElementById("half-btn");
+        const double = document.getElementById("double-btn");
+
+        half.addEventListener("click", () => {
+            const current_val = parseFloat(input_field.value);
+            if (!isNaN(current_val)) {
+                input_field.value = current_val / 2;
+                upd_net_gain();
+            }
         });
 
-        container.style.backgroundColor = dark_col;
-        button.style.backgroundColor = selected_col;
-      }
+        double.addEventListener("click", () => {
+            const current_val = parseFloat(input_field.value);
+            if (!isNaN(current_val)) {
+                input_field.value = current_val * 2;
+                upd_net_gain();
+            }
+        });
 
-      angle_slider.addEventListener("input", upd_bg);
-      first_picker.addEventListener("input", upd_bg);
-      second_picker.addEventListener("input", upd_bg);
+        input_field.addEventListener("input", () => {
+            upd_net_gain();
+        });
 
-      const input_field = document.getElementById('text-input');
-      const half = document.getElementById('half-btn');
-      const double = document.getElementById('double-btn');
+        const draggable = document.getElementById("draggable");
+        const rectangle = document.getElementById("rectangle");
+        const green_side = document.getElementById("green_side");
+        const percentage_label = document.getElementById("percentage_label");
 
-      half.addEventListener('click', () => {
-        const current_val = parseFloat(input_field.value);
-        if (!isNaN(current_val)) {
-          input_field.value = current_val / 2;
-          upd_net_gain();
+        let is_dragging = false;
+
+        draggable.addEventListener("mousedown", () => {
+            is_dragging = true;
+
+            percentage_label.style.display = "block";
+
+            setTimeout(() => {
+                percentage_label.style.opacity = "1";
+            }, 10);
+        });
+
+        document.addEventListener("mouseup", () => {
+            is_dragging = false;
+
+            percentage_label.style.opacity = "0";
+
+            setTimeout(() => {
+                percentage_label.style.display = "none";
+            }, 300);
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            if (is_dragging) {
+                const rect = rectangle.getBoundingClientRect();
+                let newX = e.clientX - rect.left;
+
+                if (newX < 0) newX = 0;
+                if (newX > rect.width) newX = rect.width;
+
+                draggable.style.left = newX + "px";
+                green_side.style.width = newX + "px";
+
+                let percentage = Math.max(1, Math.round((newX / rect.width) * 100));
+
+                percentage_label.innerText = `${percentage}%`;
+                percentage_label.style.left = newX + "px";
+                upd_net_gain();
+            }
+        });
+
+        const money_label = document.getElementById("money_label");
+        let money = 100;
+
+        function upd_money(amount) {
+            money += amount;
+            money_label.innerText = `$${money.toFixed(2)}`;
         }
-      });
 
-      double.addEventListener('click', () => {
-        const current_val = parseFloat(input_field.value);
-        if (!isNaN(current_val)) {
-          input_field.value = current_val * 2;
-          upd_net_gain();
+        const arrow = document.getElementById("arrow");
+        const rolled_value_display = document.getElementById("rolled-value");
+        const result_message = document.getElementById("result-message");
+        const roll_btn = document.getElementById("roll-btn");
+
+        let stats = {
+            wins: 0,
+            losses: 0,
+            wagered: 0,
+            win_count: 0,
+            loss_count: 0,
+        };
+
+        function upd_stats(amount, won) {
+            stats.wagered += amount;
+            if (won) {
+                stats.wins++;
+                stats.win_count++;
+            } else {
+                stats.losses++;
+                stats.loss_count++;
+            }
+
+            document.getElementById("stats-wins").innerText = `${stats.wins.toFixed(0)}`;
+            document.getElementById("stats-losses").innerText = `${stats.losses.toFixed(0)}`;
+            document.getElementById("stats-wagered").innerText = `$${stats.wagered.toFixed(2)}`;
+
+            const ratio = stats.win_count + stats.loss_count > 0 ? (stats.win_count / (stats.win_count + stats.loss_count)) * 100 : 0;
+
+            document.getElementById("stats-ratio").innerText = `${ratio.toFixed(2)}%`;
+            upd_graph();
         }
-      });
 
-      input_field.addEventListener('input', () => {
-        upd_net_gain();
-      });
+        const graph_canvas = document.getElementById("stats-graph");
+        const ctx = graph_canvas.getContext("2d");
+        let history = [0];
+        let roll_results = [];
 
-      const draggable = document.getElementById('draggable');
-      const rectangle = document.getElementById('rectangle');
-      const green_side = document.getElementById('green_side');
-      const percentage_label = document.getElementById('percentage_label');
+        function upd_graph() {
+            const max_profit = Math.max(...history);
+            const min_profit = Math.min(...history);
+            const padding = (max_profit - min_profit) * 0.1 || 10;
+            const upper_bound = max_profit + padding;
+            const lower_bound = min_profit - padding;
+            const range = upper_bound - lower_bound || 1;
 
-      let is_dragging = false;
+            ctx.clearRect(0, 0, graph_canvas.width, graph_canvas.height);
 
-      draggable.addEventListener('mousedown', () => {
-        is_dragging = true;
+            const num_labels = 5;
+            const label_spacing = graph_canvas.height / num_labels;
 
-        percentage_label.style.display = 'block';
+            ctx.font = "10px Arial";
+            ctx.fillStyle = "#666";
 
-        setTimeout(() => {
-          percentage_label.style.opacity = '1';
-        }, 10);
-      });
+            for (let i = 0; i <= num_labels; i++) {
+                const y = i * label_spacing;
+                const label_value = upper_bound - i * (range / num_labels);
+                ctx.fillText(label_value.toFixed(2), 5, y + 5);
+            }
 
-      document.addEventListener('mouseup', () => {
-        is_dragging = false;
+            if (lower_bound <= 0 && upper_bound >= 0) {
+                const zero_line_y = graph_canvas.height - ((0 - lower_bound) / range) * graph_canvas.height;
+                ctx.strokeStyle = "#666";
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(0, zero_line_y);
+                ctx.lineTo(graph_canvas.width, zero_line_y);
+                ctx.stroke();
+            }
 
-        percentage_label.style.opacity = '0';
+            ctx.strokeStyle = "#ce8eec";
+            ctx.lineWidth = 2;
+            ctx.beginPath();
 
-        setTimeout(() => {
-          percentage_label.style.display = 'none';
-        }, 300);
-      });
+            const total_points = history.length;
+            const point_spacing = graph_canvas.width / Math.max(total_points - 1, 1);
 
-      document.addEventListener('mousemove', (e) => {
-        if (is_dragging) {
-          const rect = rectangle.getBoundingClientRect();
-          let newX = e.clientX - rect.left;
+            history.forEach((value, index) => {
+                const x = index * point_spacing;
+                const y = graph_canvas.height - ((value - lower_bound) / range) * graph_canvas.height;
 
-          if (newX < 0) newX = 0;
-          if (newX > rect.width) newX = rect.width;
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
 
-          draggable.style.left = newX + 'px';
-          green_side.style.width = newX + 'px';
-
-          const percentage = Math.round((newX / rect.width) * 100);
-
-          percentage_label.innerText = `${percentage}%`;
-          percentage_label.style.left = newX + 'px';
-          upd_net_gain();
+            ctx.stroke();
         }
-      });
 
-      const money_label = document.getElementById('money_label');
-      let money = 50;
+        const tooltip = document.createElement("div");
+        tooltip.style.position = "absolute";
+        tooltip.style.padding = "5px";
+        tooltip.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+        tooltip.style.color = "white";
+        tooltip.style.borderRadius = "4px";
+        tooltip.style.display = "none";
+        document.body.appendChild(tooltip);
 
-      function upd_money(amount) {
-        money += amount;
+        graph_canvas.addEventListener("mousemove", (e) => {
+            const rect = graph_canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+
+            const total_points = history.length;
+            const point_spacing = graph_canvas.width / Math.max(total_points - 1, 1);
+            const index = Math.round(mouseX / point_spacing);
+
+            if (index >= 0 && index < history.length) {
+                const roll_result = roll_results[index];
+
+                let tooltip_text = "";
+                if (roll_result !== undefined) {
+                    if (roll_result > 0) {
+                        tooltip_text = `profit: $${roll_result.toFixed(2)}`;
+                    } else {
+                        tooltip_text = `loss: $${Math.abs(roll_result).toFixed(2)}`;
+                    }
+                }
+
+                tooltip.innerText = tooltip_text;
+                tooltip.style.left = `${e.pageX + 10}px`;
+                tooltip.style.top = `${e.pageY + 10}px`;
+                tooltip.style.display = "block";
+            }
+        });
+
+        graph_canvas.addEventListener("mouseleave", () => {
+            tooltip.style.display = "none";
+        });
+
+        let roll_interval;
+
+        roll_btn.addEventListener("mousedown", () => {
+            handle_roll();
+            roll_interval = setInterval(handle_roll, 500);
+        });
+
+        document.addEventListener("mouseup", () => {
+            clearInterval(roll_interval);
+        });
+
+        document.addEventListener("mouseleave", () => {
+            clearInterval(roll_interval);
+        });
+
+        roll_btn.addEventListener("click", () => {
+            const bet_amount = parseFloat(input_field.value);
+
+            if (isNaN(bet_amount) || bet_amount <= 0 || bet_amount > money) {
+                alert("invalid bet amount");
+                clearInterval(roll_interval);
+                return;
+            }
+
+            upd_money(-bet_amount);
+
+            const bet_percentage = Math.max(0.01, (parseFloat(percentage_label.innerText) || 0) / 100);
+            const roll_result = Math.floor(Math.random() * 100) + 1;
+
+            console.log("roll result:", roll_result);
+
+            const arrow_pos = (roll_result / 100) * rectangle.offsetWidth;
+
+            arrow.style.left = `${arrow_pos - 5}px`;
+
+            rolled_value_display.style.left = `${arrow_pos}px`;
+
+            const house_edge = 0.02;
+            const win_chance = bet_percentage * 100;
+            const payout_multiplier = (99 / win_chance) * (1 - house_edge);
+            const is_win = roll_result <= win_chance;
+
+            let profit_change = 0;
+            let message = "";
+
+            arrow.classList.remove("win", "loss");
+            rolled_value_display.classList.remove("win", "loss");
+
+            if (is_win) {
+                profit_change = bet_amount * (payout_multiplier - 1);
+                const total_wins = bet_amount + profit_change;
+                upd_money(total_wins);
+                message = `you rolled ${roll_result}, you won $${total_wins.toFixed(2)}!`;
+                upd_stats(bet_amount, true);
+
+                roll_results.push(profit_change);
+                history.push(history[history.length - 1] + profit_change);
+
+                arrow.classList.add("win");
+                rolled_value_display.classList.add("win");
+            } else {
+                profit_change = -bet_amount;
+                message = `you rolled ${roll_result}, you lost.`;
+                upd_stats(bet_amount, false);
+
+                roll_results.push(profit_change);
+                history.push(history[history.length - 1] + profit_change);
+
+                arrow.classList.add("loss");
+                rolled_value_display.classList.add("loss");
+            }
+
+            setTimeout(() => {
+                rolled_value_display.innerText = `rolled: ${roll_result}`;
+            }, 250);
+
+            result_message.innerText = message;
+            const net_gain = (money - 100).toFixed(2);
+            document.querySelector(".net-gain").innerText = `net gain: $${net_gain}`;
+            upd_graph();
+        });
+
         money_label.innerText = `$${money.toFixed(2)}`;
-      }
 
-      const arrow = document.getElementById('arrow');
-      const rolled_value_display = document.getElementById('rolled-value');
-      const result_message = document.getElementById('result-message');
-      const roll_btn = document.getElementById('roll-btn');
+        function upd_net_gain() {
+            const bet_amount = parseFloat(input_field.value) || 0;
+            const win_chance = (parseFloat(percentage_label.innerText) || 0) / 100;
+            const house_edge = 0.02;
 
-      let stats = {
-        wins: 0,
-        losses: 0,
-        wagered: 0,
-        win_count: 0,
-        loss_count: 0,
-      };
-
-      function upd_stats(amount, won) {
-        stats.wagered += amount;
-        if (won) {
-            stats.wins++;
-            stats.win_count++;
-        } else {
-            stats.losses++;
-            stats.loss_count++;
+            if (bet_amount > 0 && win_chance > 0) {
+                const payout = (99 / (win_chance * 100)) * (1 - house_edge);
+                const net_gain = bet_amount * (payout - 1);
+                document.querySelector(".net-gain").innerText = `net gain on win: $${net_gain.toFixed(2)}`;
+            } else {
+                document.querySelector(".net-gain").innerText = `net gain on win: $0.00`;
+            }
         }
-
-        document.getElementById('stats-wins').innerText = `${stats.wins.toFixed(0)}`;
-        document.getElementById('stats-losses').innerText = `${stats.losses.toFixed(0)}`;
-        document.getElementById('stats-wagered').innerText = `$${stats.wagered.toFixed(2)}`;
-
-        const ratio = stats.win_count + stats.loss_count > 0 ? (stats.win_count / (stats.win_count + stats.loss_count)) * 100 : 0;
-
-        document.getElementById('stats-ratio').innerText = `${ratio.toFixed(2)}%`;
-        upd_graph();
-    }
-
-    const graph_canvas = document.getElementById('stats-graph');
-    const ctx = graph_canvas.getContext('2d');
-    let history = [0]; 
-    let roll_results = [];  
-
-    function upd_graph() {
-
-      const max_profit = Math.max(...history);
-      const min_profit = Math.min(...history);
-      const padding = (max_profit - min_profit) * 0.1 || 10;
-      const upper_bound = max_profit + padding;
-      const lower_bound = min_profit - padding;
-      const range = upper_bound - lower_bound || 1;
-
-      ctx.clearRect(0, 0, graph_canvas.width, graph_canvas.height);
-
-      const num_labels = 5;
-      const label_spacing = graph_canvas.height / num_labels;
-
-      ctx.font = '10px Arial';
-      ctx.fillStyle = '#666';
-
-      for (let i = 0; i <= num_labels; i++) {
-        const y = i * label_spacing;
-        const label_value = upper_bound - (i * (range / num_labels));
-        ctx.fillText(label_value.toFixed(2), 5, y + 5);
-      }
-
-      if (lower_bound <= 0 && upper_bound >= 0) {
-        const zero_line_y = graph_canvas.height - ((0 - lower_bound) / range) * graph_canvas.height;
-        ctx.strokeStyle = '#666';
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(0, zero_line_y);
-        ctx.lineTo(graph_canvas.width, zero_line_y);
-        ctx.stroke();
-      }
-
-      ctx.strokeStyle = '#ce8eec';
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-
-      const total_points = history.length;
-      const point_spacing = graph_canvas.width / Math.max(total_points - 1, 1);
-
-      history.forEach((value, index) => {
-        const x = index * point_spacing;
-        const y = graph_canvas.height - ((value - lower_bound) / range) * graph_canvas.height;
-
-        if (index === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-      });
-
-      ctx.stroke();
-    }
-
-    const tooltip = document.createElement('div');
-    tooltip.style.position = 'absolute';
-    tooltip.style.padding = '5px';
-    tooltip.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-    tooltip.style.color = 'white';
-    tooltip.style.borderRadius = '4px';
-    tooltip.style.display = 'none';
-    document.body.appendChild(tooltip);
-
-    graph_canvas.addEventListener('mousemove', (e) => {
-      const rect = graph_canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-
-      const total_points = history.length;
-      const point_spacing = graph_canvas.width / Math.max(total_points - 1, 1);
-      const index = Math.round(mouseX / point_spacing);
-
-      if (index >= 0 && index < history.length) {
-        const roll_result = roll_results[index];  
-
-        let tooltip_text = '';
-        if (roll_result !== undefined) {
-          if (roll_result > 0) {
-            tooltip_text = `profit: $${roll_result.toFixed(2)}`;
-          } else {
-            tooltip_text = `loss: $${Math.abs(roll_result).toFixed(2)}`;
-          }
-        }
-
-        tooltip.innerText = tooltip_text;
-        tooltip.style.left = `${e.pageX + 10}px`;  
-        tooltip.style.top = `${e.pageY + 10}px`;  
-        tooltip.style.display = 'block';
-      }
-    });
-
-    graph_canvas.addEventListener('mouseleave', () => {
-      tooltip.style.display = 'none';
-    });
-
-    roll_btn.addEventListener('click', () => {
-      const bet_amount = parseFloat(input_field.value);
-
-      if (isNaN(bet_amount) || bet_amount <= 0 || bet_amount > money) {
-        alert('invalid bet amount!');
-        return;
-      }
-
-      upd_money(-bet_amount);
-
-      const bet_percentage = (parseFloat(percentage_label.innerText) || 0) / 100;
-      const roll_result = Math.floor(Math.random() * 100) + 1;
-
-      console.log('roll result:', roll_result);
-
-      const arrow_pos = (roll_result / 100) * rectangle.offsetWidth;
-
-      arrow.style.left = `${arrow_pos - 5}px`;
-      rolled_value_display.innerText = `rolled: ${roll_result}`;
-      rolled_value_display.style.left = `${arrow_pos}px`;
-
-      const house_edge = 0.02;
-      const win_chance = bet_percentage * 100;
-      const payout_multiplier = (99 / win_chance) * (1 - house_edge);
-      const is_win = roll_result <= win_chance;
-
-      let profit_change = 0;
-      let message = '';
-
-      if (is_win) {
-        profit_change = bet_amount * (payout_multiplier - 1);
-        const total_wins = bet_amount + profit_change;
-        upd_money(total_wins);
-        message = `you rolled ${roll_result}, you won $${total_wins.toFixed(2)}!`;
-        upd_stats(bet_amount, true);
-
-        roll_results.push(profit_change);
-        history.push(history[history.length - 1] + profit_change);  
-      } else {
-        profit_change = -bet_amount;
-        message = `you rolled ${roll_result}, you lost.`;
-        upd_stats(bet_amount, false);
-
-        roll_results.push(profit_change);  
-        history.push(history[history.length - 1] + profit_change);  
-      }
-
-      result_message.innerText = message;
-      const net_gain = (money - 100).toFixed(2);
-      document.querySelector('.net-gain').innerText = `net gain: $${net_gain}`;
-      upd_graph();  
-    });
-
-      money_label.innerText = `$${money.toFixed(2)}`;
-
-      function upd_net_gain() {
-        const bet_amount = parseFloat(input_field.value) || 0;
-        const win_chance = (parseFloat(percentage_label.innerText) || 0) / 100;
-        const house_edge = 0.02;
-
-        if (bet_amount > 0 && win_chance > 0) {
-          const payout = (99 / (win_chance * 100)) * (1 - house_edge);
-          const net_gain = bet_amount * (payout - 1);
-          document.querySelector('.net-gain').innerText = `net gain on win: $${net_gain.toFixed(2)}`;
-        } else {
-          document.querySelector('.net-gain').innerText = `net gain on win: $0.00`;
-        }
-      }
     </script>
-  </body>
+</body>
 </html>
