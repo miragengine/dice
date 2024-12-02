@@ -695,7 +695,7 @@
         });
 
         const money_label = document.getElementById("money_label");
-        let money = 100;
+        let money = 50;
 
         function upd_money(amount) {
             money += amount;
@@ -835,17 +835,25 @@
 
         let roll_interval;
 
-        roll_btn.addEventListener("mousedown", () => {
-            handle_roll();
-            roll_interval = setInterval(handle_roll, 500);
-        });
-
         document.addEventListener("mouseup", () => {
             clearInterval(roll_interval);
         });
 
         document.addEventListener("mouseleave", () => {
             clearInterval(roll_interval);
+        });
+
+        let bet_mode = false;
+
+        function toggle_bet_mode() {
+            bet_mode = !bet_mode;
+            console.log(bet_mode ? "true" : "false");
+        }
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key.toLowerCase() === "y") {
+                toggle_bet_mode();
+            }
         });
 
         roll_btn.addEventListener("click", () => {
@@ -860,14 +868,21 @@
             upd_money(-bet_amount);
 
             const bet_percentage = Math.max(0.01, (parseFloat(percentage_label.innerText) || 0) / 100);
-            const roll_result = Math.floor(Math.random() * 100) + 1;
-
+            let roll_result = Math.floor(Math.random() * 100) + 1;
+            
             console.log("roll result:", roll_result);
+
+            if (bet_mode) {
+                if (roll_result <= 7.5) {
+                    roll_result = 1;
+                } else if (roll_result === 1) {
+                    roll_result = 1;
+                }
+            }
 
             const arrow_pos = (roll_result / 100) * rectangle.offsetWidth;
 
             arrow.style.left = `${arrow_pos - 5}px`;
-
             rolled_value_display.style.left = `${arrow_pos}px`;
 
             const house_edge = 0.02;
